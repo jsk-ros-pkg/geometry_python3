@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tf)
+project(tf_python3)
+
+set(Python_ADDITIONAL_VERSIONS 3.6;3.7;3.8) ## https://stackoverflow.com/questions/29245558/how-to-link-with-python3-libs-with-cmake
+find_package(PythonInterp 3 REQUIRED) ## tf_python3 :: use Python3 by default
+find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 # Melodic default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -28,10 +32,11 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-add_message_files(DIRECTORY msg FILES tfMessage.msg)
-add_service_files(DIRECTORY srv FILES FrameGraph.srv)
+## tf_python3 :: we can share msg and srv FILES.
+# add_message_files(DIRECTORY msg FILES tfMessage.msg)
+# add_service_files(DIRECTORY srv FILES FrameGraph.srv)
 
-generate_messages(DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
+# generate_messages(DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -114,7 +119,7 @@ add_rostest(test/test_broadcaster.launch)
 add_executable(testBroadcaster test/testBroadcaster.cpp)
 target_link_libraries(testBroadcaster ${PROJECT_NAME})
 
-catkin_add_nosetests(test/testPython.py) 
+catkin_add_nosetests(test/testPython.py)
 add_executable(tf_speed_test EXCLUDE_FROM_ALL test/speed_test.cpp)
 target_link_libraries(tf_speed_test ${PROJECT_NAME})
 
@@ -124,26 +129,31 @@ endif()
 
 endif() # CATKIN_ENABLE_TESTING AND NOT ANDROID
 
-install(DIRECTORY include/${PROJECT_NAME}/
-    DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-)
+## tf_python3 :: we can share include, library and executable directories.
+# install(DIRECTORY include/${PROJECT_NAME}/
+#     DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
+# )
 
-# Install library
-install(TARGETS ${PROJECT_NAME}
-    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-    RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
-)
+# # Install library
+# install(TARGETS ${PROJECT_NAME}
+#     ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#     LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#     RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION}
+# )
 
-# Install executable
-install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
-    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
+# # Install executable
+# install(TARGETS tf_echo tf_empty_listener tf_change_notifier tf_monitor static_transform_publisher
+#     RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
 
 # Install rosrun-able scripts
-install(PROGRAMS
-  scripts/bullet_migration_sed.py
-  scripts/tf_remap
-  scripts/view_frames
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
+# install(PROGRAMS
+#   scripts/bullet_migration_sed.py
+#   scripts/tf_remap
+#   scripts/view_frames
+#   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
 
+## tf_pytyhon3 :: re-set PROJECT_NAME to tf
+set(PROJECT_NAME tf)
+## tf_pytyhon3 :: re-set CATKIN_PACKAGE_PYTHON_DESTINATION with PROJECT_NAME as tf
+set(CATKIN_PACKAGE_PYTHON_DESTINATION lib/python${PYTHON_VERSION_MAJOR}/dist-packages/${PROJECT_NAME})
