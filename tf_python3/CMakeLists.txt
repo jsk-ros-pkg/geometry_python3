@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tf)
+project(tf_python3)
+
+set(Python_ADDITIONAL_VERSIONS 3.6;3.7;3.8) ## https://stackoverflow.com/questions/29245558/how-to-link-with-python3-libs-with-cmake
+find_package(PythonInterp 3 REQUIRED) ## tf_python3 :: use Python3 by default
+find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 # Melodic default to C++14
 if(NOT CMAKE_CXX_STANDARD)
@@ -28,10 +32,10 @@ include_directories(
     ${catkin_INCLUDE_DIRS}
 )
 
-add_message_files(DIRECTORY msg FILES tfMessage.msg)
-add_service_files(DIRECTORY srv FILES FrameGraph.srv)
+# add_message_files(DIRECTORY msg FILES tfMessage.msg)
+# add_service_files(DIRECTORY srv FILES FrameGraph.srv)
 
-generate_messages(DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
+# generate_messages(DEPENDENCIES geometry_msgs sensor_msgs std_msgs)
 
 catkin_package(
   INCLUDE_DIRS include
@@ -147,3 +151,7 @@ install(PROGRAMS
   scripts/view_frames
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION} )
 
+## tf_pytyhon3 :: re-set PROJECT_NAME to tf
+set(PROJECT_NAME tf)
+## tf_pytyhon3 :: re-set CATKIN_PACKAGE_PYTHON_DESTINATION with PROJECT_NAME as tf
+set(CATKIN_PACKAGE_PYTHON_DESTINATION lib/python${PYTHON_VERSION_MAJOR}/dist-packages/${PROJECT_NAME})
