@@ -1,5 +1,5 @@
 <package>
-  <name>tf_conversions</name>
+  <name>tf_conversions_python3</name>
   <version>1.12.1</version>
   <description>
 
@@ -20,6 +20,7 @@ the next major release cycle (see roadmap).
   <url>http://www.ros.org/wiki/tf_conversions</url>
 
   <buildtool_depend version_gte="0.5.68">catkin</buildtool_depend>
+  <buildtool_depend>python3-catkin-pkg-modules</buildtool_depend>
 
   <build_depend>eigen</build_depend>
   <build_depend>geometry_msgs</build_depend>
