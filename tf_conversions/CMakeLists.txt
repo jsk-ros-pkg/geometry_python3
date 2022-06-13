@@ -1,13 +1,9 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(tf_conversions_python3)
+project(tf_conversions)
 
 find_package(orocos_kdl REQUIRED)
 find_package(catkin REQUIRED geometry_msgs kdl_conversions tf)
 find_package(Eigen3 REQUIRED)
-
-set(Python_ADDITIONAL_VERSIONS 3.6;3.7;3.8) ## https://stackoverflow.com/questions/29245558/how-to-link-with-python3-libs-with-cmake
-find_package(PythonInterp 3 REQUIRED) ## tf_python3 :: use Python3 by default
-find_package(PythonLibs "${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 catkin_python_setup()
 
@@ -47,16 +43,11 @@ catkin_add_nosetests(test/posemath.py)
 
 endif()
 
-## tf_conversions_python3 :: we can share include, library and executable directories.
-# install(DIRECTORY include/${PROJECT_NAME}/
-#   DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-# install(TARGETS ${PROJECT_NAME}
-#   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-#   RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
+install(DIRECTORY include/${PROJECT_NAME}/
+  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 
-## tf_pytyhon3 :: re-set PROJECT_NAME to tf
-set(PROJECT_NAME tf_conversions)
-## tf_pytyhon3 :: re-set CATKIN_PACKAGE_PYTHON_DESTINATION with PROJECT_NAME as tf
-set(CATKIN_PACKAGE_PYTHON_DESTINATION lib/python${PYTHON_VERSION_MAJOR}/dist-packages/${PROJECT_NAME})
+install(TARGETS ${PROJECT_NAME}
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_GLOBAL_BIN_DESTINATION})
